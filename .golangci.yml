@@ -1,0 +1,128 @@
+version: 2
+
+run:
+  tests: true
+  timeout: 10m
+  modules-download-mode: readonly
+
+linters:
+  disable-all: true
+  enable:
+    # correctness
+    - govet
+    - staticcheck
+    - errcheck
+    - ineffassign
+    - unused
+
+    # code quality
+    - gocyclo
+    - dupl
+    - goconst
+    - gocritic
+
+    # style / idiomatic Go
+    - revive
+    - whitespace
+    - wsl_v5
+    - nilnil
+    - nlreturn
+
+    # performance
+    - prealloc
+    - unconvert
+    - wastedassign
+
+    # bug detection
+    - bodyclose
+    - rowserrcheck
+    - sqlclosecheck
+    - errorlint
+    - exhaustive
+
+    # complexity / readability
+    - nestif
+    - funlen
+    - lll
+
+    # formatting
+    - misspell
+
+    # security
+    - gosec
+
+    # maintenance
+    - godox
+    - nolintlint
+    - forbidigo
+
+  settings:
+    wsl_v5:
+      allow-first-in-block: true
+      allow-whole-block: false
+      branch-max-lines: 2
+    gosec:
+      severity: medium
+      confidence: medium
+    lll:
+      line-length: 120
+    nestif:
+      min-complexity: 4
+    funlen:
+      lines: 80
+      statements: 40
+    dupl:
+      threshold: 100
+    errcheck:
+      check-type-assertions: true
+      check-blank: true
+    gocyclo:
+      min-complexity: 15
+    govet:
+      enable-all: true
+    godox:
+      keywords:
+        - BUG
+        - FIXME
+        - HACK
+        - TODO
+    revive:
+      rules:
+        - name: var-naming
+        - name: receiver-naming
+        - name: indent-error-flow
+        - name: exported
+          arguments:
+            - checkPrivateReceivers
+            - disableStutteringCheck
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - linters:
+          - dupl
+          - errcheck
+          - gocyclo
+        path: _test\.go
+      - linters:
+          - govet
+          - revive
+          - staticcheck
+        path: generated
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    gofmt:
+      simplify: true
+  exclusions:
+    generated: lax
